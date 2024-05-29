@@ -1,3 +1,5 @@
 ---
 bucket: test-intern-github-action
 website_dir: /var/www/html
+destination: /var/www/html/index.html
+object: index.html
