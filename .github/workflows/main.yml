@@ -3,6 +3,8 @@ on:
   push: 
     branches:
       - dev
+  pull_request:
+    types: [opened, reopened]
 
 jobs:
   creating_ec2_and_s3:
