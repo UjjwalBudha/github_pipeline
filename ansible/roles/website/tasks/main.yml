@@ -38,8 +38,8 @@
 - name: Download file from s3 to ec2
   amazon.aws.s3_object:
     bucket: "test-intern-github-action"
-    dest: {{ destination }}
-    object: {{ object }}
+    dest: "{{ destination }}"
+    object: "{{ object }}"
     mode: get
     overwrite: true
   notify: Restart nginx
