@@ -1,0 +1,69 @@
+name: github_action_to_S3
+on:
+  push: 
+    branches:
+      - dev
+
+jobs:
+  creating_ec2_and_s3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Creating EC2 instance with Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ secrets.TERRAFORM_VERSION }}
+
+      - name: Terraform Init
+        run: |
+          cd terraform
+          terraform init
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+          AWS_DEFAULT_REGION: us-east-1 
+
+      - name: Terraform apply
+        run: |
+          cd terraform
+          terraform apply -var-file=dev.tfvars -auto-approve
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+          AWS_DEFAULT_REGION: us-east-1 
+
+      - name: Configure AWS credentials for S3
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}  
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1  
+
+      - name: Upload code to S3
+        run: |
+          cd code
+          aws s3 cp index.html s3://test-intern-github-action/
+
+      - name: Configure AWS credentials for Ansible
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}  
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1 
+
+      - name: Install Ansible
+        run: pip3 install boto3 ansible
+
+      - name: Install Ansible collections
+        run: cd ansible && ansible-galaxy collection install -r requirements.yml
+
+      - name: Run Ansible playbook
+        run: |
+          cd ansible
+          ansible-playbook -i aws_ec2.yml playbook.yml

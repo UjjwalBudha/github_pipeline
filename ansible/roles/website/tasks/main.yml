@@ -1,0 +1,43 @@
+---
+- name: Install python3-pip and nginx
+  ansible.builtin.apt:
+    name:
+     - nginx
+     - python3-pip
+    state: present
+    update_cache: true
+
+- name: Ensure snapd is installed
+  apt:
+    name: snapd
+    state: present
+    update_cache: yes
+
+- name: Ensure Snap service is started and enabled
+  systemd:
+    name: snapd
+    state: started
+    enabled: yes
+
+- name: Install AWS CLI using Snap
+  snap:
+    name: aws-cli
+    classic: yes
+    state: present
+
+- name: Install boto3 and botocore using apt
+  apt:
+    name:
+      - python3-boto3
+      - python3-botocore
+    state: present
+    update_cache: yes
+
+- name: Download file from s3 to ec2
+  amazon.aws.s3_object:
+    bucket: "test-intern-github-action"
+    dest: /var/www/html/index.html
+    object: index.html
+    mode: get
+    overwrite: true
+  notify: Restart nginx
