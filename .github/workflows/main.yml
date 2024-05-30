@@ -38,6 +38,9 @@ jobs:
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
           AWS_DEFAULT_REGION: us-east-1 
 
+  upoading_code_to_S3:
+    runs-on: ubuntu-latest
+    steps:
       - name: Configure AWS credentials for S3
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -50,6 +53,10 @@ jobs:
         run: |
           cd code
           aws s3 cp index.html s3://test-intern-github-action/
+
+  Running_Ansible_playbook:
+    runs-on: ubuntu-latest
+    steps:
 
       - name: Configure AWS credentials for Ansible
         uses: aws-actions/configure-aws-credentials@v4
