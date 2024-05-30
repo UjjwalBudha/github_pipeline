@@ -9,7 +9,7 @@ module "ec2" {
   vpc_security_group_ids      = var.sg_id
   subnet_id                   = var.subnet_id # public subnet
   iam_instance_profile        = "intern-ujwal"
-  key_name = try(var.key_name, null)
+  key_name                    = try(var.key_name, null)
   tags = {
     Name = each.value
   }
@@ -17,7 +17,7 @@ module "ec2" {
 
 module "s3_bucket" {
   source = "terraform-aws-modules/s3-bucket/aws"
-  bucket = "test-intern-github-action" 
+  bucket = "test-intern-github-action"
 }
 
 resource "aws_s3_object" "file_upload" {

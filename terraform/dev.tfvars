@@ -12,7 +12,7 @@ subnet_id                   = "subnet-0f97b0bb45cdeb3b7"
 monitoring                  = true
 associate_public_ip_address = true
 # ssm_policy                    = "arn:aws:iam::aws:policy/AmazonSSMManagedEC2InstanceDefaultPolicy"
-key_name   = "intern-ujwal"
+key_name = "intern-ujwal"
 
 
 
