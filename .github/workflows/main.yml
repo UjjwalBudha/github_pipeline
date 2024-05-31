@@ -33,16 +33,10 @@ jobs:
           cd terraform
           terraform apply -var-file=dev.tfvars -auto-approve
 
-      - name: Configure AWS credentials for S3
-        uses: aws-actions/configure-aws-credentials@v2
-
       - name: Upload code to S3
         run: |
           cd code
           aws s3 cp index.html s3://test-intern-github-action/
-
-      - name: Configure AWS credentials for Ansible
-        uses: aws-actions/configure-aws-credentials@v4
 
       - name: Install Ansible
         run: pip3 install boto3 ansible
