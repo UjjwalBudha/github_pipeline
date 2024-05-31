@@ -3,3 +3,9 @@ bucket: test-intern-github-action
 website_dir: /var/www/html
 destination: /var/www/html/index.html
 object: index.html
+common_packages:
+  - nginx
+  - python3-pip
+  - snapd
+  - python3-boto3
+  - python3-botocore
