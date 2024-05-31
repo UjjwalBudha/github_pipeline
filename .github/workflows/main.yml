@@ -4,7 +4,7 @@ on:
     branches:
       - dev
   pull_request:
-    types: [opened, reopened]
+      - main
 
 jobs:
   dev:
