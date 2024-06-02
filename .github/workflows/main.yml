@@ -35,8 +35,7 @@ jobs:
 
       - name: Upload code to S3
         run: |
-          cd code
-          aws s3 cp index.html s3://test-intern-github-action/
+          cd code && aws s3 cp index.html s3://test-intern-github-action/
 
       - name: Install Ansible
         run: pip3 install boto3 ansible
