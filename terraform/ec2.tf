@@ -19,9 +19,3 @@ module "s3_bucket" {
   source = "terraform-aws-modules/s3-bucket/aws"
   bucket = "test-intern-github-action-ujwal"
 }
-
-resource "aws_s3_object" "file_upload" {
-  bucket = module.s3_bucket.s3_bucket_id
-  key    = "index.html"
-  source = "../code/index.html"
-}
