@@ -1,10 +1,12 @@
-name: github_action_to_S3
+name: github_action_to_ec2
 on:
-  push: 
-    branches:
-      - dev
+  workflow_dispatch:
+
+  push:
+    branches: [ "*" ]
+
   pull_request:
-    types: [opened, reopened]
+    branches: [ "main" ]
 
 jobs:
   dev:
